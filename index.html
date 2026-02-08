@@ -2,7 +2,7 @@
 <html lang="da">
 <head>
   <meta charset="utf-8">
-  <title>Carmens Portfolio</title>
+  <title>Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -10,25 +10,23 @@
 <body>
 
 <header>
-  <h1>Carmens Portfolio</h1>
+  <h1>Portfolio</h1>
 </header>
 
 <main class="frame">
   <section class="grid" id="grid" aria-label="Portfolio billeder"></section>
 </main>
 
-<!-- Lightbox overlay -->
+<!-- Lightbox -->
 <div class="lightbox" id="lightbox" aria-hidden="true">
   <div class="lightbox__backdrop" data-close="1"></div>
 
-  <div class="lightbox__panel" role="dialog" aria-modal="true" aria-label="Billedevisning">
-    <button class="lightbox__close" type="button" aria-label="Luk" data-close="1">×</button>
-
+  <div class="lightbox__panel" role="dialog" aria-modal="true">
+    <button class="lightbox__close" data-close="1">×</button>
     <img class="lightbox__img" id="lightboxImg" alt="">
     <div class="lightbox__caption" id="lightboxCaption"></div>
-
-    <button class="lightbox__nav lightbox__prev" type="button" aria-label="Forrige">‹</button>
-    <button class="lightbox__nav lightbox__next" type="button" aria-label="Næste">›</button>
+    <button class="lightbox__nav lightbox__prev">‹</button>
+    <button class="lightbox__nav lightbox__next">›</button>
   </div>
 </div>
 
@@ -37,158 +35,97 @@
   const IMAGE_DIR = "images/";
   const EXT = ".jpg";
 
-  // Lightbox state
-  let items = [];      // [{src, caption}]
+  let items = [];
   let currentIndex = -1;
 
-  async function loadCaptions() {
+  async function loadCaptionMap() {
     const res = await fetch("captions.json", { cache: "no-store" });
     if (!res.ok) throw new Error("Kunne ikke hente captions.json");
-    const data = await res.json();
-    return Array.isArray(data) ? data : [];
+    const obj = await res.json();
+    return (obj && typeof obj === "object") ? obj : {};
   }
 
-  function filenameFor(i) {
-    const n = String(i).padStart(3, "0"); // 001..065
-    return `${n}${EXT}`;
-  }
-
-  function makeCard(src, captionText, index) {
+  function makeCard(src, caption, index) {
     const fig = document.createElement("figure");
     fig.className = "polaroid";
-    fig.dataset.index = String(index);
 
     const photo = document.createElement("div");
     photo.className = "photo";
 
     const img = document.createElement("img");
-    img.loading = "lazy";
     img.src = src;
-    img.alt = captionText || "";
-
-    // klik på billedet -> lightbox
+    img.loading = "lazy";
+    img.alt = caption;
     img.addEventListener("click", () => openLightbox(index));
 
     const cap = document.createElement("figcaption");
-    cap.textContent = captionText || "";
+    cap.textContent = caption;
 
     photo.appendChild(img);
     fig.appendChild(photo);
     fig.appendChild(cap);
-
     return fig;
   }
 
-  function setLightboxOpen(isOpen) {
-    const lb = document.getElementById("lightbox");
-    lb.classList.toggle("is-open", isOpen);
-    lb.setAttribute("aria-hidden", isOpen ? "false" : "true");
-
-    // lås scroll på body når lightbox er åben
-    document.body.style.overflow = isOpen ? "hidden" : "";
-  }
-
-  function showIndex(idx) {
-    if (idx < 0) idx = items.length - 1;
-    if (idx >= items.length) idx = 0;
-
-    currentIndex = idx;
-
-    const { src, caption } = items[idx];
-    const img = document.getElementById("lightboxImg");
-    const cap = document.getElementById("lightboxCaption");
-
-    img.src = src;
-    img.alt = caption || "";
-    cap.textContent = caption || "";
-  }
-
-  function openLightbox(idx) {
-    setLightboxOpen(true);
-    showIndex(idx);
+  function openLightbox(i) {
+    currentIndex = i;
+    document.body.style.overflow = "hidden";
+    document.getElementById("lightbox").classList.add("is-open");
+    showImage();
   }
 
   function closeLightbox() {
-    setLightboxOpen(false);
-    currentIndex = -1;
+    document.body.style.overflow = "";
+    document.getElementById("lightbox").classList.remove("is-open");
+  }
+
+  function showImage() {
+    const it = items[currentIndex];
+    document.getElementById("lightboxImg").src = it.src;
+    document.getElementById("lightboxCaption").textContent = it.caption;
   }
 
   function next() {
-    if (currentIndex === -1) return;
-    showIndex(currentIndex + 1);
+    currentIndex = (currentIndex + 1) % items.length;
+    showImage();
   }
 
   function prev() {
-    if (currentIndex === -1) return;
-    showIndex(currentIndex - 1);
+    currentIndex = (currentIndex - 1 + items.length) % items.length;
+    showImage();
   }
 
-  function setupLightboxControls() {
-    const lb = document.getElementById("lightbox");
-    const prevBtn = lb.querySelector(".lightbox__prev");
-    const nextBtn = lb.querySelector(".lightbox__next");
+  document.getElementById("lightbox").addEventListener("click", e => {
+    if (e.target.dataset.close) closeLightbox();
+  });
 
-    // Close via backdrop/close button
-    lb.addEventListener("click", (e) => {
-      const t = e.target;
-      if (t && t.dataset && t.dataset.close === "1") closeLightbox();
-    });
+  document.querySelector(".lightbox__next").onclick = next;
+  document.querySelector(".lightbox__prev").onclick = prev;
 
-    prevBtn.addEventListener("click", prev);
-    nextBtn.addEventListener("click", next);
-
-    // Keyboard controls
-    document.addEventListener("keydown", (e) => {
-      if (!lb.classList.contains("is-open")) return;
-
-      if (e.key === "Escape") closeLightbox();
-      else if (e.key === "ArrowRight") next();
-      else if (e.key === "ArrowLeft") prev();
-    });
-
-    // Swipe (mobil) - simpelt
-    let startX = null;
-    lb.addEventListener("touchstart", (e) => {
-      if (!lb.classList.contains("is-open")) return;
-      startX = e.touches[0].clientX;
-    }, { passive: true });
-
-    lb.addEventListener("touchend", (e) => {
-      if (!lb.classList.contains("is-open") || startX === null) return;
-      const endX = e.changedTouches[0].clientX;
-      const dx = endX - startX;
-      startX = null;
-      if (Math.abs(dx) > 40) {
-        if (dx < 0) next();
-        else prev();
-      }
-    }, { passive: true });
-  }
+  document.addEventListener("keydown", e => {
+    if (!document.getElementById("lightbox").classList.contains("is-open")) return;
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowRight") next();
+    if (e.key === "ArrowLeft") prev();
+  });
 
   async function run() {
-    setupLightboxControls();
-
-    let captions = [];
+    let captionMap = {};
     try {
-      captions = await loadCaptions();
-    } catch (e) {
-      console.warn(e);
-      captions = [];
-    }
+      captionMap = await loadCaptionMap();
+    } catch {}
 
     const grid = document.getElementById("grid");
-    items = [];
 
     for (let i = 1; i <= IMAGE_COUNT; i++) {
-      const file = filenameFor(i);            // "001.jpg"
-      const src = `${IMAGE_DIR}${file}`;
+      const n = String(i).padStart(3, "0");
+      const file = n + EXT;
+      const src = IMAGE_DIR + file;
 
-      // Brug teksten fra captions.json hvis den findes og ikke er tom,
-      // ellers brug filnavnet.
-      const fromJson = captions[i - 1];
-      const caption = (typeof fromJson === "string" && fromJson.trim() !== "")
-        ? fromJson.trim()
-        : file;
+      const caption =
+        (captionMap[file] && captionMap[file].trim() !== "")
+          ? captionMap[file].trim()
+          : file;
 
       items.push({ src, caption });
       grid.appendChild(makeCard(src, caption, i - 1));
