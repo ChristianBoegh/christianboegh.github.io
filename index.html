@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio</title>
+  <style>
+    :root{
+      --bg:#0b2f4a;
+      --title:#fff;
+      --frame-red:#c62828;
+      --paper:#fff;
+      --shadow:rgba(0,0,0,.35);
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: Georgia, "Times New Roman", serif;
+      background: var(--bg);
+      color: var(--title);
+    }
+    header{
+      padding: 22px 26px 10px 26px;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 10;
+    }
+    h1{
+      margin:0;
+      font-size: clamp(28px, 3vw, 44px);
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    .frame{
+      margin: 10px 18px 26px 18px;
+      border: 4px solid var(--frame-red);
+      padding: 22px 22px 28px 22px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px 26px;
+      align-items:start;
+    }
+
+    figure.polaroid{
+      margin:0;
+      background: var(--paper);
+      padding: 14px 14px 12px 14px;
+      box-shadow: 0 10px 18px var(--shadow);
+      border-radius: 2px;
+      overflow:hidden;
+      color:#111;
+      display:flex;
+      flex-direction:column;
+    }
+    figure.polaroid img{
+      width:100%;
+      height:220px;
+      object-fit:cover;
+      display:block;
+      background:#eee;
+    }
+    figcaption{
+      margin-top:10px;
+      min-height:30px;           /* polaroid “bund” med fast højde */
+      padding: 0 6px 8px;
+      text-align:center;
+      font-size:16px;
+      line-height:1.2;
+      color:#111;
+
+      /* hvis teksten er lang: */
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    @media (max-width:980px){
+      .grid{ grid-template-columns: repeat(2, 1fr); }
+      figure.polaroid img{ height:240px; }
+    }
+    @media (max-width:620px){
+      .grid{ grid-template-columns: 1fr; }
+      figure.polaroid img{ height:260px; }
+      header{ padding:18px 16px 8px; }
+      .frame{ margin:8px 12px 22px; padding:18px; }
+    }
+  </style>
+</head>
+<body>
+  <header><h1>Portfolio</h1></header>
+
+  <main class="frame">
+    <section class="grid" id="grid" aria-label="Portfolio billeder"></section>
+  </main>
+
+  <script>
+    const IMAGE_COUNT = 65;
+    const IMAGE_DIR = "images/";
+    const EXT = ".jpg";
+
+    async function loadCaptions() {
+      // captions.json skal ligge sammen med index.html
+      const res = await fetch("captions.json", { cache: "no-store" });
+      if (!res.ok) throw new Error("Kunne ikke hente captions.json");
+      return await res.json(); // forventer array med 65 tekster
+    }
+
+    function makeCard(src, captionText) {
+      const fig = document.createElement("figure");
+      fig.className = "polaroid";
+
+      const img = document.createElement("img");
+      img.loading = "lazy";
+      img.src = src;
+      img.alt = captionText || "";
+
+      const cap = document.createElement("figcaption");
+      cap.textContent = captionText || "";
+
+      fig.appendChild(img);
+      fig.appendChild(cap);
+      return fig;
+    }
+
+    async function run() {
+      let captions = [];
+      try {
+        captions = await loadCaptions();
+      } catch (e) {
+        console.warn(e);
+        // fallback: ingen tekster
+        captions = [];
+      }
+
+      const grid = document.getElementById("grid");
+
+      for (let i = 1; i <= IMAGE_COUNT; i++) {
+        const n = String(i).padStart(3, "0");     // 001..065
+        const src = `${IMAGE_DIR}${n}${EXT}`;
+        const captionText = captions[i - 1] ?? ""; // tekst nr. i
+        grid.appendChild(makeCard(src, captionText));
+      }
+    }
+
+    run();
+  </script>
+</body>
+</html>
