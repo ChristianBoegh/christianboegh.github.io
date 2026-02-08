@@ -2,7 +2,7 @@
 <html lang="da">
 <head>
   <meta charset="utf-8">
-  <title>Portfolio</title>
+  <title>Carmens Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -10,7 +10,7 @@
 <body>
 
 <header>
-  <h1>Portfolio</h1>
+  <h1>Carmens Portfolio</h1>
 </header>
 
 <main class="frame">
@@ -38,11 +38,37 @@
   let items = [];
   let currentIndex = -1;
 
-  async function loadCaptionMap() {
-    const res = await fetch("captions.json", { cache: "no-store" });
-    if (!res.ok) throw new Error("Kunne ikke hente captions.json");
-    const obj = await res.json();
-    return (obj && typeof obj === "object") ? obj : {};
+  function filenameFor(i) {
+    return String(i).padStart(3, "0") + EXT; // 001.jpg..065.jpg
+  }
+
+  async function loadCaptionsAnyFormat() {
+    const url = "captions.json";
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error(`Kunne ikke hente ${url} (HTTP ${res.status})`);
+
+    const data = await res.json();
+
+    // 1) Anbefalet format: { "001.jpg": "tekst", ... }
+    if (data && typeof data === "object" && !Array.isArray(data)) {
+      console.log("captions.json: objekt-format OK");
+      return data;
+    }
+
+    // 2) Fallback: ["001.jpg","tekst","002.jpg","tekst", ...]
+    if (Array.isArray(data)) {
+      console.log("captions.json: array-format (pairs) OK");
+      const obj = {};
+      for (let i = 0; i < data.length; i += 2) {
+        const file = (typeof data[i] === "string") ? data[i].trim() : "";
+        const text = (typeof data[i + 1] === "string") ? data[i + 1].trim() : "";
+        if (file) obj[file] = text;
+      }
+      return obj;
+    }
+
+    console.warn("captions.json havde et ukendt format:", data);
+    return {};
   }
 
   function makeCard(src, caption, index) {
@@ -98,7 +124,6 @@
   document.getElementById("lightbox").addEventListener("click", e => {
     if (e.target.dataset.close) closeLightbox();
   });
-
   document.querySelector(".lightbox__next").onclick = next;
   document.querySelector(".lightbox__prev").onclick = prev;
 
@@ -110,22 +135,27 @@
   });
 
   async function run() {
-    let captionMap = {};
-    try {
-      captionMap = await loadCaptionMap();
-    } catch {}
-
     const grid = document.getElementById("grid");
 
+    let captionMap = {};
+    try {
+      captionMap = await loadCaptionsAnyFormat();
+      console.log("Antal captions læst:", Object.keys(captionMap).length);
+      console.log("Eksempel 001.jpg caption:", captionMap["001.jpg"]);
+    } catch (e) {
+      console.error("Fejl ved indlæsning af captions.json:", e);
+      captionMap = {};
+    }
+
+    items = [];
+    grid.innerHTML = "";
+
     for (let i = 1; i <= IMAGE_COUNT; i++) {
-      const n = String(i).padStart(3, "0");
-      const file = n + EXT;
+      const file = filenameFor(i);
       const src = IMAGE_DIR + file;
 
-      const caption =
-        (captionMap[file] && captionMap[file].trim() !== "")
-          ? captionMap[file].trim()
-          : file;
+      const txt = captionMap[file];
+      const caption = (typeof txt === "string" && txt.trim() !== "") ? txt.trim() : file;
 
       items.push({ src, caption });
       grid.appendChild(makeCard(src, caption, i - 1));
@@ -134,6 +164,7 @@
 
   run();
 </script>
+
 
 </body>
 </html>
