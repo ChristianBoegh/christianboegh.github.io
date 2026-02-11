@@ -8,17 +8,40 @@
 </head>
 
 <script>
-  function postHeight(){
-    const h = Math.max(
-      document.body.scrollHeight,
-      document.documentElement.scrollHeight
-    );
-    parent.postMessage({ type: "cvHeight", height: h }, "*");
-  }
-  window.addEventListener("load", postHeight);
-  window.addEventListener("resize", postHeight);
-  setTimeout(postHeight, 250);
+  (function () {
+    function height() {
+      return Math.max(
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight,
+        document.documentElement.offsetHeight,
+        document.body.offsetHeight
+      );
+    }
+
+    function post() {
+      const h = height();
+      parent.postMessage({ type: "cvHeight", height: h }, "*");
+    }
+
+    // Når alt er loadet
+    window.addEventListener("load", () => {
+      post();
+
+      // Send igen efter billeder/font kan have ændret layout
+      setTimeout(post, 200);
+      setTimeout(post, 600);
+      setTimeout(post, 1200);
+    });
+
+    // Hvis vinduet ændrer størrelse
+    window.addEventListener("resize", post);
+
+    // Hvis DOM ændrer sig (sektioner åbner, fonts loader etc.)
+    const ro = new ResizeObserver(post);
+    ro.observe(document.documentElement);
+  })();
 </script>
+
 
 
 <body>
