@@ -13,9 +13,11 @@
   <!-- VENSTRE SIDE -->
   <aside class="sidebar">
 
-    <div class="photo-wrapper">
+    <!-- Klikbar profilfoto -->
+    <button class="profile-photo" id="profilePhotoBtn" type="button" aria-label="Vis profilbillede større">
       <img src="assets/profile.jpg" alt="Carmen Mirela Bøgh">
-    </div>
+      <span class="profile-photo__hint">Klik for at se større</span>
+    </button>
 
     <div class="contact">
       <h3>Kontaktinformation</h3>
@@ -165,6 +167,44 @@
 
   </main>
 </div>
+
+<!-- Lightbox til profilbillede -->
+<div class="lightbox" id="photoLightbox" aria-hidden="true">
+  <div class="lightbox__backdrop" data-close="1"></div>
+
+  <div class="lightbox__panel" role="dialog" aria-modal="true" aria-label="Profilbillede">
+    <button class="lightbox__close" type="button" aria-label="Luk" data-close="1">×</button>
+    <img class="lightbox__img" id="photoLightboxImg" src="assets/profile.jpg" alt="Carmen Mirela Bøgh">
+  </div>
+</div>
+
+<script>
+  const lb = document.getElementById("photoLightbox");
+  const openBtn = document.getElementById("profilePhotoBtn");
+
+  function openLightbox(){
+    lb.classList.add("is-open");
+    lb.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeLightbox(){
+    lb.classList.remove("is-open");
+    lb.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  openBtn.addEventListener("click", openLightbox);
+
+  lb.addEventListener("click", (e) => {
+    if (e.target && e.target.dataset && e.target.dataset.close === "1") closeLightbox();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (!lb.classList.contains("is-open")) return;
+    if (e.key === "Escape") closeLightbox();
+  });
+</script>
 
 </body>
 </html>
