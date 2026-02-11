@@ -189,3 +189,53 @@ li{
     font-size:16px;
   }
 }
+
+/* ===== Modern hover effect ===== */
+
+.polaroid .photo{
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Billedet */
+.polaroid .photo img{
+  transition: transform .35s ease, filter .35s ease;
+}
+
+/* Overlay */
+.polaroid .photo::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  transition: background .35s ease;
+}
+
+/* Zoom + mørkning */
+.polaroid .photo:hover img{
+  transform: scale(1.12);
+  filter: brightness(.85);
+}
+
+.polaroid .photo:hover::after{
+  background: rgba(0,0,0,.25);
+}
+
+/* 🔍 Ikon */
+.polaroid .photo::before{
+  content: "🔍";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(.8);
+  font-size: 32px;
+  opacity: 0;
+  transition: opacity .25s ease, transform .25s ease;
+  pointer-events: none;
+}
+
+.polaroid .photo:hover::before{
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
