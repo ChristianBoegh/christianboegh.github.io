@@ -1,13 +1,9 @@
-/* ====== Grundopsætning ====== */
-
 body{
   margin:0;
   font-family: Georgia, "Times New Roman", serif;
   background:#f2f2f2;
   color:#111;
 }
-
-/* ====== Layout wrapper ====== */
 
 .layout{
   display:flex;
@@ -17,8 +13,7 @@ body{
   box-shadow:0 10px 30px rgba(0,0,0,.15);
 }
 
-/* ====== VENSTRE SIDE ====== */
-
+/* VENSTRE SIDE */
 .sidebar{
   width:320px;
   background:#0e3552;
@@ -26,53 +21,66 @@ body{
   padding:30px 20px;
 }
 
-/* Profilbillede */
-
-.photo-wrapper{
+/* Klikbart profilfoto (cirkel) */
+.profile-photo{
   width:220px;
   height:220px;
   margin:0 auto 30px auto;
   border-radius:50%;
   overflow:hidden;
   border:8px solid white;
+  padding:0;
+  display:block;
+  background:transparent;
   cursor:pointer;
+  position:relative;
 }
 
-.photo-wrapper img{
+.profile-photo img{
   width:100%;
   height:100%;
   object-fit:cover;
-  transition: transform .4s ease, filter .4s ease;
+  display:block;
 }
 
-/* Hover-effekt */
-.photo-wrapper:hover img{
-  transform: scale(1.08);
-  filter: brightness(.95);
+/* Hover-hint overlay (viser at det kan klikkes) */
+.profile-photo__hint{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:10px;
+  color:#fff;
+  font-size:14px;
+  background:rgba(0,0,0,0);
+  opacity:0;
+  transition: opacity .25s ease, background .25s ease;
+}
+
+.profile-photo:hover .profile-photo__hint{
+  opacity:1;
+  background:rgba(0,0,0,.35);
 }
 
 /* Kontakt */
-
 .contact h3{
   margin:0 0 10px 0;
   font-size:18px;
 }
-
 .contact p{
   margin:6px 0;
   font-size:15px;
   line-height:1.35;
 }
 
-/* ====== HØJRE SIDE ====== */
-
+/* HØJRE SIDE */
 .content{
   flex:1;
   padding:40px 50px;
   border-left:8px solid #c62828;
 }
-
-/* Header */
 
 .header{
   background:#0e3552;
@@ -84,6 +92,7 @@ body{
 .header h1{
   margin:0;
   font-size:30px;
+  letter-spacing:1px;
 }
 
 .subtitle{
@@ -91,8 +100,6 @@ body{
   font-size:18px;
   letter-spacing:2px;
 }
-
-/* Sektioner */
 
 section{
   margin-bottom:26px;
@@ -110,18 +117,77 @@ p{
   line-height:1.4;
 }
 
-/* Mobil */
+/* Lightbox */
+.lightbox{
+  position:fixed;
+  inset:0;
+  display:none;
+  z-index:9999;
+}
 
+.lightbox.is-open{
+  display:block;
+}
+
+.lightbox__backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.75);
+}
+
+.lightbox__panel{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:min(92vw, 900px);
+  height:min(88vh, 900px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+}
+
+.lightbox__img{
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto;
+  object-fit:contain; /* viser hele billedet */
+  border-radius:10px;
+  box-shadow:0 12px 26px rgba(0,0,0,.45);
+  background:rgba(255,255,255,.05);
+}
+
+.lightbox__close{
+  position:absolute;
+  right:14px;
+  top:10px;
+  width:44px;
+  height:44px;
+  border:0;
+  border-radius:22px;
+  cursor:pointer;
+  font-size:28px;
+  line-height:44px;
+  background:rgba(255,255,255,.15);
+  color:#fff;
+}
+
+.lightbox__close:hover{
+  background:rgba(255,255,255,.25);
+}
+
+/* Mobil */
 @media (max-width:900px){
-  .layout{
-    flex-direction:column;
-  }
-  .sidebar{
-    width:auto;
-    text-align:center;
-  }
+  .layout{ flex-direction:column; }
+  .sidebar{ width:auto; text-align:center; }
   .content{
     border-left:0;
     border-top:8px solid #c62828;
+    padding:30px 25px;
   }
+  .header{ margin:-30px -25px 25px -25px; }
+  .header h1{ font-size:24px; }
+  .subtitle{ font-size:16px; }
 }
