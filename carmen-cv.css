@@ -7,7 +7,7 @@ body{
   color:#111;
 }
 
-/* ====== Layout wrapper (A4-look) ====== */
+/* ====== Layout wrapper ====== */
 
 .layout{
   display:flex;
@@ -17,15 +17,16 @@ body{
   box-shadow:0 10px 30px rgba(0,0,0,.15);
 }
 
-/* ====== VENSTRE SIDE (mørk blå kolonne) ====== */
+/* ====== VENSTRE SIDE ====== */
 
 .sidebar{
   width:320px;
   background:#0e3552;
   color:white;
   padding:30px 20px;
-  position:relative;
 }
+
+/* Profilbillede */
 
 .photo-wrapper{
   width:220px;
@@ -34,20 +35,27 @@ body{
   border-radius:50%;
   overflow:hidden;
   border:8px solid white;
+  cursor:pointer;
 }
 
 .photo-wrapper img{
   width:100%;
   height:100%;
   object-fit:cover;
+  transition: transform .4s ease, filter .4s ease;
 }
 
-/* Kontaktblok */
+/* Hover-effekt */
+.photo-wrapper:hover img{
+  transform: scale(1.08);
+  filter: brightness(.95);
+}
+
+/* Kontakt */
 
 .contact h3{
   margin:0 0 10px 0;
   font-size:18px;
-  font-weight:700;
 }
 
 .contact p{
@@ -61,10 +69,10 @@ body{
 .content{
   flex:1;
   padding:40px 50px;
-  border-left:8px solid #c62828; /* rød lodret streg */
+  border-left:8px solid #c62828;
 }
 
-/* ====== Header øverst ====== */
+/* Header */
 
 .header{
   background:#0e3552;
@@ -76,7 +84,6 @@ body{
 .header h1{
   margin:0;
   font-size:30px;
-  letter-spacing:1px;
 }
 
 .subtitle{
@@ -85,7 +92,7 @@ body{
   letter-spacing:2px;
 }
 
-/* ====== Sektioner ====== */
+/* Sektioner */
 
 section{
   margin-bottom:26px;
@@ -94,9 +101,7 @@ section{
 h2{
   color:#0e3552;
   font-size:18px;
-  font-weight:700;
   margin:28px 0 10px 0;
-  letter-spacing:.3px;
 }
 
 p{
@@ -105,137 +110,18 @@ p{
   line-height:1.4;
 }
 
-/* Lister */
-
-ul{
-  margin:8px 0 16px 0;
-  padding-left:22px;
-}
-
-li{
-  margin:4px 0;
-  font-size:16px;
-  line-height:1.35;
-}
-
-/* ====== Side 2 markør ====== */
-
-.pagebreak{
-  height:30px;
-}
-
-/* ====== Print-version (A4) ====== */
-
-@media print{
-
-  body{
-    background:#fff;
-  }
-
-  .layout{
-    max-width:none;
-    margin:0;
-    box-shadow:none;
-  }
-
-  .pagebreak{
-    page-break-before:always;
-    height:0;
-  }
-
-  .sidebar{
-    padding:20px;
-  }
-
-  .content{
-    padding:30px;
-  }
-}
-
-/* ====== Mobil / Tablet ====== */
+/* Mobil */
 
 @media (max-width:900px){
-
   .layout{
     flex-direction:column;
-    max-width:720px;
   }
-
   .sidebar{
     width:auto;
     text-align:center;
   }
-
-  .photo-wrapper{
-    width:180px;
-    height:180px;
-  }
-
   .content{
     border-left:0;
     border-top:8px solid #c62828;
-    padding:30px 25px;
   }
-
-  .header{
-    margin:-30px -25px 25px -25px;
-  }
-
-  .header h1{
-    font-size:24px;
-  }
-
-  .subtitle{
-    font-size:16px;
-  }
-}
-
-/* ===== Modern hover effect ===== */
-
-.polaroid .photo{
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-/* Billedet */
-.polaroid .photo img{
-  transition: transform .35s ease, filter .35s ease;
-}
-
-/* Overlay */
-.polaroid .photo::after{
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0);
-  transition: background .35s ease;
-}
-
-/* Zoom + mørkning */
-.polaroid .photo:hover img{
-  transform: scale(1.12);
-  filter: brightness(.85);
-}
-
-.polaroid .photo:hover::after{
-  background: rgba(0,0,0,.25);
-}
-
-/* 🔍 Ikon */
-.polaroid .photo::before{
-  content: "🔍";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(.8);
-  font-size: 32px;
-  opacity: 0;
-  transition: opacity .25s ease, transform .25s ease;
-  pointer-events: none;
-}
-
-.polaroid .photo:hover::before{
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
 }
