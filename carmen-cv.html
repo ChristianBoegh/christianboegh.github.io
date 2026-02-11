@@ -2,48 +2,10 @@
 <html lang="da">
 <head>
   <meta charset="utf-8">
-  <title>Carmen Mirela Bøgh – CV</title>
+  <title>Carmen Mirela Bøgh – Curriculum Vitae</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="carmen-cv.css">
+  <link rel="stylesheet" href="cv.css">
 </head>
-
-<script>
-  (function () {
-    function height() {
-      return Math.max(
-        document.documentElement.scrollHeight,
-        document.body.scrollHeight,
-        document.documentElement.offsetHeight,
-        document.body.offsetHeight
-      );
-    }
-
-    function post() {
-      const h = height();
-      parent.postMessage({ type: "cvHeight", height: h }, "*");
-    }
-
-    // Når alt er loadet
-    window.addEventListener("load", () => {
-      post();
-
-      // Send igen efter billeder/font kan have ændret layout
-      setTimeout(post, 200);
-      setTimeout(post, 600);
-      setTimeout(post, 1200);
-    });
-
-    // Hvis vinduet ændrer størrelse
-    window.addEventListener("resize", post);
-
-    // Hvis DOM ændrer sig (sektioner åbner, fonts loader etc.)
-    const ro = new ResizeObserver(post);
-    ro.observe(document.documentElement);
-  })();
-</script>
-
-
-
 <body>
 
 <div class="layout">
@@ -51,6 +13,7 @@
   <!-- VENSTRE SIDE (mørk blå) -->
   <aside class="sidebar">
     <div class="photo-wrapper">
+      <!-- Skift filnavn hvis nødvendigt -->
       <img src="assets/profile.jpg" alt="Carmen Mirela Bøgh">
     </div>
 
@@ -75,28 +38,118 @@
     <section>
       <h2>PROFIL</h2>
       <p>
-        Jeg brænder for madlavning og for at skabe gode oplevelser for gæsterne,
-        uanset om det er i restaurant, kantine eller catering.
-        Jeg arbejder meget fokuseret på alle opgaver. Min baggrund fra både Danmark
-        og Rumænien har givet mig et godt kulinarisk udgangspunkt og en naturlig glæde ved at lave mad til andre.
+        Jeg brænder for madlavning og for at skabe gode oplevelser for gæsterne, uanset om det er i restaurant,
+        kantine eller catering. Jeg arbejder meget fokuseret på alle opgaver. Min baggrund fra både Danmark og
+        Rumænien har givet mig et godt kulinarisk udgangspunkt og en naturlig glæde ved at lave mad til andre.
       </p>
     </section>
 
     <section>
       <h2>ERHVERVSERFARING – KOK</h2>
-      <p><strong>2025–2026 vikariater i kantiner hos</strong></p>
+
+      <p><strong>2025-2026 vikariater i kantiner hos</strong></p>
       <ul>
         <li>LEGO</li>
         <li>NorSea</li>
         <li>2Care4</li>
-        <li>Glycom Manufacturing A/S</li>
-        <li>Kokkenes Køkken - Andritz Feed & Biofuel</li>
+        <li>Glycom Manufactoring A/S</li>
+        <li>Kokkenes Køkken - Andritz Feed &amp; Biofuel</li>
         <li>VELUX</li>
+      </ul>
+
+      <p><strong>2025 Kok, Kogehuset/Storkesøen, Ribe</strong><br>(tidsbegrænset kontrakt)</p>
+      <ul>
+        <li>Daglig produktion af firmafrokost og selskaber.</li>
+        <li>Ansvar for morgenbuffet og køkkenet på faste dage.</li>
+      </ul>
+
+      <p><strong>2022–2025 Kokkeelev, Kogehuset/Storkesøen, Ribe</strong></p>
+      <ul>
+        <li>Daglig produktion til plejehjem, selskaber og firmafrokost.</li>
+        <li>Varm/kold produktion, egenkontrol og planlægning.</li>
+      </ul>
+
+      <p><strong>2022 Kokkeelev, Søgården, Brørup</strong></p>
+      <ul>
+        <li>Buffet, a la carte, gæstebetjening og service.</li>
+      </ul>
+
+      <p><strong>2021 Modulpraktik, VELUX Kantine, Skjern</strong></p>
+      <ul>
+        <li>Produktion, anretning og dagligt kantineflow.</li>
       </ul>
     </section>
 
-  </main>
+    <section>
+      <h2>ANDEN ERFARING</h2>
 
+      <p><strong>2015–2026 Rengøringsassistent, forskellige arbejdspladser</strong></p>
+      <ul>
+        <li>Arbejde med høje krav til kvalitet, orden og hygiejne.</li>
+      </ul>
+
+      <p><strong>2001–2015 Direktionsassistent / undervisning (Rumænien)</strong></p>
+      <ul>
+        <li>Administrative funktioner og undervisning, herunder kommunikation og planlægning.</li>
+      </ul>
+    </section>
+
+    <!-- Side 2 begynder her (print) -->
+    <div class="pagebreak" aria-hidden="true"></div>
+
+    <section>
+      <h2>UDDANNELSE</h2>
+
+      <p><strong>2021–2025 Gastronom – Kok, Rybners, Esbjerg</strong></p>
+      <ul>
+        <li>Grundforløb og hovedforløb bestået.</li>
+        <li>Praktik:</li>
+        <li>Søgården, Brørup: buffet og a la carte.</li>
+        <li>Kogehuset/Storkesøen, Ribe: kantinemad, selskaber, firmafrokost, selvstændigt ansvar.</li>
+      </ul>
+
+      <p><strong>2015–2019 Supplerende uddannelse (DK)</strong></p>
+      <ul>
+        <li>Dansk: Prøve i Dansk 2</li>
+        <li>VUC Vest: 9./10. klasse.</li>
+      </ul>
+
+      <p><strong>1996–2001 Tidligere uddannelse (Rumænien)</strong></p>
+      <ul>
+        <li>Bachelorgrad i Fransk og Italiensk, Universitetet i Bukarest.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>FRIVILLIGT ARBEJDE</h2>
+      <ul>
+        <li>Røde Kors, Esbjerg.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>SPROG</h2>
+      <ul>
+        <li>Rumænsk: Modersmål</li>
+        <li>Dansk: God arbejdsevne (PD2 + erfaring)</li>
+        <li>Fransk og Italiensk: Professionelt niveau</li>
+        <li>Engelsk: Praktisk arbejdsevne</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>PERSONLIGT</h2>
+      <p>
+        Jeg er 47 år. Jeg kom til Danmark i 2015 og bor i Esbjerg sammen med min danske mand og min datter.
+        Jeg holder af et roligt og stabilt hverdagsliv, hvor jeg har god tid til familie, venner og madlavning.
+      </p>
+      <p>
+        Jeg inviterer gerne gæster hjem og nyder at lave god mad til dem. Jeg kan også godt lide at komme ud og
+        opleve kultur, koncerter og biograf.
+      </p>
+    </section>
+
+  </main>
 </div>
 
 </body>

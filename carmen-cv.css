@@ -1,8 +1,13 @@
+/* ====== Grundopsætning ====== */
+
 body{
   margin:0;
   font-family: Georgia, "Times New Roman", serif;
   background:#f2f2f2;
+  color:#111;
 }
+
+/* ====== Layout wrapper (A4-look) ====== */
 
 .layout{
   display:flex;
@@ -12,10 +17,11 @@ body{
   box-shadow:0 10px 30px rgba(0,0,0,.15);
 }
 
-/* VENSTRE SIDE */
+/* ====== VENSTRE SIDE (mørk blå kolonne) ====== */
+
 .sidebar{
   width:320px;
-  background:#0e3552; /* mørk blå */
+  background:#0e3552;
   color:white;
   padding:30px 20px;
   position:relative;
@@ -36,23 +42,29 @@ body{
   object-fit:cover;
 }
 
-/* Kontakt */
+/* Kontaktblok */
+
 .contact h3{
-  margin-top:0;
+  margin:0 0 10px 0;
   font-size:18px;
+  font-weight:700;
 }
 
 .contact p{
-  margin:8px 0;
+  margin:6px 0;
   font-size:15px;
+  line-height:1.35;
 }
 
-/* HØJRE SIDE */
+/* ====== HØJRE SIDE ====== */
+
 .content{
   flex:1;
   padding:40px 50px;
-  border-left:6px solid red; /* rød kant som i screenshot */
+  border-left:8px solid #c62828; /* rød lodret streg */
 }
+
+/* ====== Header øverst ====== */
 
 .header{
   background:#0e3552;
@@ -63,7 +75,7 @@ body{
 
 .header h1{
   margin:0;
-  font-size:28px;
+  font-size:30px;
   letter-spacing:1px;
 }
 
@@ -73,16 +85,107 @@ body{
   letter-spacing:2px;
 }
 
+/* ====== Sektioner ====== */
+
+section{
+  margin-bottom:26px;
+}
+
 h2{
   color:#0e3552;
   font-size:18px;
-  margin-top:30px;
+  font-weight:700;
+  margin:28px 0 10px 0;
+  letter-spacing:.3px;
 }
+
+p{
+  margin:0 0 12px 0;
+  font-size:16px;
+  line-height:1.4;
+}
+
+/* Lister */
 
 ul{
-  padding-left:20px;
+  margin:8px 0 16px 0;
+  padding-left:22px;
 }
 
-section{
-  margin-bottom:20px;
+li{
+  margin:4px 0;
+  font-size:16px;
+  line-height:1.35;
+}
+
+/* ====== Side 2 markør ====== */
+
+.pagebreak{
+  height:30px;
+}
+
+/* ====== Print-version (A4) ====== */
+
+@media print{
+
+  body{
+    background:#fff;
+  }
+
+  .layout{
+    max-width:none;
+    margin:0;
+    box-shadow:none;
+  }
+
+  .pagebreak{
+    page-break-before:always;
+    height:0;
+  }
+
+  .sidebar{
+    padding:20px;
+  }
+
+  .content{
+    padding:30px;
+  }
+}
+
+/* ====== Mobil / Tablet ====== */
+
+@media (max-width:900px){
+
+  .layout{
+    flex-direction:column;
+    max-width:720px;
+  }
+
+  .sidebar{
+    width:auto;
+    text-align:center;
+  }
+
+  .photo-wrapper{
+    width:180px;
+    height:180px;
+  }
+
+  .content{
+    border-left:0;
+    border-top:8px solid #c62828;
+    padding:30px 25px;
+  }
+
+  .header{
+    margin:-30px -25px 25px -25px;
+  }
+
+  .header h1{
+    font-size:24px;
+  }
+
+  .subtitle{
+    font-size:16px;
+  }
 }
