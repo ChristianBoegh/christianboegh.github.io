@@ -6,6 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="carmen-cv.css">
 </head>
+
+<script>
+  function postHeight(){
+    const h = Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight
+    );
+    parent.postMessage({ type: "cvHeight", height: h }, "*");
+  }
+  window.addEventListener("load", postHeight);
+  window.addEventListener("resize", postHeight);
+  setTimeout(postHeight, 250);
+</script>
+
+
 <body>
 
 <div class="layout">
